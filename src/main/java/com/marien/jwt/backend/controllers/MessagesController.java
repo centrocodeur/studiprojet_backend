@@ -13,6 +13,6 @@ public class MessagesController {
 
     @GetMapping("/messages")
     public ResponseEntity <List<String>> messages(){
-        return ResponseEntity.ok(Arrays.asList("firs", "second"));
+        return ResponseEntity.ok(Arrays.asList("first", "second"));
     }
 }

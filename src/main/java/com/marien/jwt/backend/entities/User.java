@@ -18,6 +18,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @Table(name = "app_user")
 public class User {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +31,7 @@ public class User {
 
 
     @Column(nullable = false)
-    private  String login;
+    private  String email;
 
     @Column(nullable = false)
     private  String password;

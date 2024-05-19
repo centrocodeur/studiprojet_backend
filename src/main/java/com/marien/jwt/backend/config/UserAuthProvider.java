@@ -11,7 +11,7 @@ import com.marien.jwt.backend.exceptions.AppException;
 import com.marien.jwt.backend.mappers.UserMapper;
 import com.marien.jwt.backend.repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
-import lombok.Data;
+//import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class UserAuthProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime()+ 3_600_000);
         return JWT.create()
-                .withIssuer(dto.getLogin())
+                .withIssuer(dto.getEmail())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
                 .withClaim("firstName", dto.getFirstName())
@@ -55,6 +55,7 @@ public class UserAuthProvider {
 
 
     public Authentication validateToken(String token){
+        System.out.println("Validation token");
         Algorithm algorithm= Algorithm.HMAC256(secretKey);
 
         JWTVerifier verifier = JWT.require(algorithm).build();
@@ -62,7 +63,7 @@ public class UserAuthProvider {
         DecodedJWT decoded = verifier.verify(token);
 
         UserDto user = UserDto.builder()
-                .login(decoded.getIssuer())
+                .email(decoded.getIssuer()) // .login(decoded.getIssuer())
                 .firstName(decoded.getClaim("firstName").asString())
                 .lastName(decoded.getClaim("lastName").asString())
                 .build();
@@ -70,13 +71,13 @@ public class UserAuthProvider {
     }
 
     public Authentication validateTokenStrongly(String token){
-
+        System.out.println("Strongly Validation token");
         Algorithm algorithm= Algorithm.HMAC256(secretKey);
 
         JWTVerifier verifier = JWT.require(algorithm).build();
 
         DecodedJWT decoded = verifier.verify(token);
-       User user= userRepository.findByLogin(decoded.getIssuer())
+       User user= userRepository.findByEmail(decoded.getIssuer())
                 .orElseThrow(()-> new AppException("Unknown user", HttpStatus.NOT_FOUND));
 
        return new UsernamePasswordAuthenticationToken(userMapper.toUserDto(user), null, Collections.emptyList());
