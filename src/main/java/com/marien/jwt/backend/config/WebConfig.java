@@ -22,7 +22,8 @@ public class WebConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config= new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("https://joparis24.netlify.app/");
+        config.addAllowedOrigin("https://joparis24.netlify.app/"); // for production
+        //config.addAllowedOrigin("http://localhost:4200"); // for dev
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
